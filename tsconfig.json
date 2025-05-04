@@ -34,7 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "components/main/TaiKhoanCaNhan/TKCT_Main.jsx"  ],
   "exclude": [
     "node_modules"
   ]

@@ -1,5 +1,4 @@
 import React from 'react'
-
 import FormRegister from '@/components/src/FormRegister'
 
 const Main = () => {
