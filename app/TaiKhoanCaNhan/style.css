@@ -4,6 +4,10 @@
     padding: 0;
 }
 
+* {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+
 .TKCN_container_css {
     padding-top: 100px;
     min-height: 100vh;
@@ -192,6 +196,36 @@
 .date_picker .ant-picker-suffix + .ant-picker-clear {
     right: 16px;
 }
+
+.select_css {
+    height: 48px;
+    width: 100%;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.ant-select-selector {
+    background-color: #F9F9F9!important;
+    border: none!important;
+    color: #000000e6!important;
+    display: flex;
+    align-items: center;
+    padding: 0 12px!important;
+}
+
+.ant-select-arrow {
+    color: rgb(0, 0, 0)!important;
+}
+
+.ant-select-arrow svg {
+    opacity: 0.3;
+    height: 20px!important;
+    width: 20px!important;
+}
+
 
 .info_item_edit {
     color: #000000;

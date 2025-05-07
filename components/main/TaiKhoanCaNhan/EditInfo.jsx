@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { FaEdit, FaAngleDown, FaCalendar } from 'react-icons/fa';
 import { validateDob } from './utils';
-import { message, DatePicker } from 'antd';
+import { message, DatePicker, Select } from 'antd';
 import dayjs from 'dayjs';
+
+const { Option } = Select;
 
 export default function EditInfo({ department, user, onSave }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -158,16 +160,82 @@ export default function EditInfo({ department, user, onSave }) {
                     <div className='info_item'>
                         <div className='info_item_title'>Quê quán</div>
                         <div className='info_item_content'>
-                            <input 
-                                type="text" 
-                                value={editedUser.hometown} 
+                            <Select
+                                className='info_item_content select_css kanit-regular'
+                                showSearch
+                                value={editedUser.hometown}
                                 disabled={!isEditing}
-                                onChange={(e) => handleInputChange('hometown', e.target.value)}
                                 placeholder="Nhập quê quán"
-                            />
-                            <div className={`info_item_edit ${isEditing ? 'editing' : ''}`}>
-                                {isEditing ? <FaEdit style={{opacity: 0.8, cursor: 'default'}} /> : <FaEdit />}
-                            </div>
+                                onChange={(value) => handleInputChange('hometown', value)}
+                                filterOption={(input, option) =>
+                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
+                                suffixIcon={isEditing ? <FaAngleDown style={{opacity: 0.8, cursor: 'default'}} /> : <FaAngleDown />}
+                            >
+                                <Option className="kanit-regular" value="An Giang">An Giang</Option>
+                                <Option className="kanit-regular" value="Bà Rịa - Vũng Tàu">Bà Rịa - Vũng Tàu</Option>
+                                <Option className="kanit-regular" value="Bắc Giang">Bắc Giang</Option>
+                                <Option className="kanit-regular" value="Bắc Kạn">Bắc Kạn</Option>
+                                <Option className="kanit-regular" value="Bạc Liêu">Bạc Liêu</Option>
+                                <Option className="kanit-regular" value="Bắc Ninh">Bắc Ninh</Option>
+                                <Option className="kanit-regular" value="Bến Tre">Bến Tre</Option>
+                                <Option className="kanit-regular" value="Bình Định">Bình Định</Option>
+                                <Option className="kanit-regular" value="Bình Dương">Bình Dương</Option>
+                                <Option className="kanit-regular" value="Bình Phước">Bình Phước</Option>
+                                <Option className="kanit-regular" value="Bình Thuận">Bình Thuận</Option>
+                                <Option className="kanit-regular" value="Cà Mau">Cà Mau</Option>
+                                <Option className="kanit-regular" value="Cần Thơ">Cần Thơ</Option>
+                                <Option className="kanit-regular" value="Cao Bằng">Cao Bằng</Option>
+                                <Option className="kanit-regular" value="Đà Nẵng">Đà Nẵng</Option>
+                                <Option className="kanit-regular" value="Đắk Lắk">Đắk Lắk</Option>
+                                <Option className="kanit-regular" value="Đắk Nông">Đắk Nông</Option>
+                                <Option className="kanit-regular" value="Điện Biên">Điện Biên</Option>
+                                <Option className="kanit-regular" value="Đồng Nai">Đồng Nai</Option>
+                                <Option className="kanit-regular" value="Đồng Tháp">Đồng Tháp</Option>
+                                <Option className="kanit-regular" value="Gia Lai">Gia Lai</Option>
+                                <Option className="kanit-regular" value="Hà Giang">Hà Giang</Option>
+                                <Option className="kanit-regular" value="Hà Nam">Hà Nam</Option>
+                                <Option className="kanit-regular" value="Hà Nội">Hà Nội</Option>
+                                <Option className="kanit-regular" value="Hà Tĩnh">Hà Tĩnh</Option>
+                                <Option className="kanit-regular" value="Hải Dương">Hải Dương</Option>
+                                <Option className="kanit-regular" value="Hải Phòng">Hải Phòng</Option>
+                                <Option className="kanit-regular" value="Hậu Giang">Hậu Giang</Option>
+                                <Option className="kanit-regular" value="Hòa Bình">Hòa Bình</Option>
+                                <Option className="kanit-regular" value="Hưng Yên">Hưng Yên</Option>
+                                <Option className="kanit-regular" value="Khánh Hòa">Khánh Hòa</Option>
+                                <Option className="kanit-regular" value="Kiên Giang">Kiên Giang</Option>
+                                <Option className="kanit-regular" value="Kon Tum">Kon Tum</Option>
+                                <Option className="kanit-regular" value="Lai Châu">Lai Châu</Option>
+                                <Option className="kanit-regular" value="Lâm Đồng">Lâm Đồng</Option>
+                                <Option className="kanit-regular" value="Lạng Sơn">Lạng Sơn</Option>
+                                <Option className="kanit-regular" value="Lào Cai">Lào Cai</Option>
+                                <Option className="kanit-regular" value="Long An">Long An</Option>
+                                <Option className="kanit-regular" value="Nam Định">Nam Định</Option>
+                                <Option className="kanit-regular" value="Nghệ An">Nghệ An</Option>
+                                <Option className="kanit-regular" value="Ninh Bình">Ninh Bình</Option>
+                                <Option className="kanit-regular" value="Ninh Thuận">Ninh Thuận</Option>
+                                <Option className="kanit-regular" value="Phú Thọ">Phú Thọ</Option>
+                                <Option className="kanit-regular" value="Phú Yên">Phú Yên</Option>
+                                <Option className="kanit-regular" value="Quảng Bình">Quảng Bình</Option>
+                                <Option className="kanit-regular" value="Quảng Nam">Quảng Nam</Option>
+                                <Option className="kanit-regular" value="Quảng Ngãi">Quảng Ngãi</Option>
+                                <Option className="kanit-regular" value="Quảng Ninh">Quảng Ninh</Option>
+                                <Option className="kanit-regular" value="Quảng Trị">Quảng Trị</Option>
+                                <Option className="kanit-regular" value="Sóc Trăng">Sóc Trăng</Option>
+                                <Option className="kanit-regular" value="Sơn La">Sơn La</Option>
+                                <Option className="kanit-regular" value="Tây Ninh">Tây Ninh</Option>
+                                <Option className="kanit-regular" value="Thái Bình">Thái Bình</Option>
+                                <Option className="kanit-regular" value="Thái Nguyên">Thái Nguyên</Option>
+                                <Option className="kanit-regular" value="Thanh Hóa">Thanh Hóa</Option>
+                                <Option className="kanit-regular" value="Thừa Thiên Huế">Thừa Thiên Huế</Option>
+                                <Option className="kanit-regular" value="Tiền Giang">Tiền Giang</Option>
+                                <Option className="kanit-regular" value="TP Hồ Chí Minh">TP Hồ Chí Minh</Option>
+                                <Option className="kanit-regular" value="Trà Vinh">Trà Vinh</Option>
+                                <Option className="kanit-regular" value="Tuyên Quang">Tuyên Quang</Option>
+                                <Option className="kanit-regular" value="Vĩnh Long">Vĩnh Long</Option>
+                                <Option className="kanit-regular" value="Vĩnh Phúc">Vĩnh Phúc</Option>
+                                <Option className="kanit-regular" value="Yên Bái">Yên Bái</Option>
+                            </Select>
                         </div>
                     </div>
                 </div>
