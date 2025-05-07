@@ -163,6 +163,7 @@
     line-height: 48px;
     font-size: 1rem;
     padding-left: 12px;
+    background-color: #F9F9F9;
 }
 
 .date_picker .ant-picker-input > input:disabled {
