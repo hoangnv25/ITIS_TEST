@@ -133,9 +133,63 @@
     outline: none;
 }
 
-.info_item_content input:disabled {
+.date_picker {
+    width: 100%;
+    height: 48px;
+    border: none;
+    padding: 0;
+}
+
+.date_picker :disabled {
     background-color: transparent;
     cursor: default;
+    color: #000000e6;
+    
+}
+
+
+.date_picker .ant-picker {
+    height: 48px;
+    width: 100%;
+    background-color: #F9F9F9;
+}
+
+.date_picker .ant-picker-input {
+    height: 48px;
+}
+
+.date_picker .ant-picker-input > input {
+    height: 48px;
+    line-height: 48px;
+    font-size: 1rem;
+    padding-left: 12px;
+}
+
+.date_picker .ant-picker-input > input:disabled {
+    background-color: #F9F9F9;
+    cursor: default;
+    color: #000000e6;
+}
+
+.date_picker .ant-picker-input > input:hover {
+    background-color: #F9F9F9;
+}
+
+.date_picker .ant-picker-suffix {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.date_picker .ant-picker-clear {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.date_picker .ant-picker-suffix + .ant-picker-clear {
+    right: 16px;
 }
 
 .info_item_edit {
@@ -169,6 +223,7 @@
 .edit_button {
     background-color: #4182F9;
     color: white;
+    
 }
 
 .edit_button:hover {
@@ -343,39 +398,8 @@
 
     .l_m_hide {
         display: block;
-        width: 100px;
+        width: fit-content;
         height: 42px;
     }
-}
-
-.dob-input {
-    width: 100%;
-    padding-left: 12px;
-    font-size: 1rem;
-    border-radius: 8px;
-    background-color: #F9F9F9;
-    border: none;
-    outline: none;
-    color: #000000cc;
-}
-
-.dob-input::placeholder {
-    color: #999;
-    opacity: 0.5;
-}
-
-.dob-input:focus::placeholder {
-    color: transparent;
-}
-
-/* Style cho dấu / */
-.dob-input {
-    letter-spacing: 1px;
-}
-
-.dob-input::before {
-    content: '/';
-    color: #000;
-    font-weight: bold;
 }
 

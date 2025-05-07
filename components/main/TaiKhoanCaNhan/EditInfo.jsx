@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { FaEdit, FaAngleDown } from 'react-icons/fa';
+import { FaEdit, FaAngleDown, FaCalendar } from 'react-icons/fa';
 import { validateDob } from './utils';
-import { message } from 'antd';
+import { message, DatePicker } from 'antd';
+import dayjs from 'dayjs';
 
 export default function EditInfo({ department, user, onSave }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -13,7 +14,12 @@ export default function EditInfo({ department, user, onSave }) {
             year: 2000
         }
     });
-    const [dobInput, setDobInput] = useState('');
+
+    const displayDob = (dob) => {
+        if (!dob) return '';
+        const dobString = String(dob).padStart(8, '0');
+        return `${dobString.slice(6, 8)}/${dobString.slice(4, 6)}/${dobString.slice(0, 4)}`;
+    };
 
     useEffect(() => {
         if (user?.dob) {
@@ -27,12 +33,9 @@ export default function EditInfo({ department, user, onSave }) {
                         year: parseInt(dobString.slice(0, 4))
                     }
                 }));
-                setDobInput(dobString.replace(/^(\d{4})(\d{2})(\d{2})$/, '$3/$2/$1'));
             } catch (error) {
                 console.error('Error parsing dob:', error);
             }
-        } else {
-            setDobInput('dd/mm/yyyy');
         }
     }, [user]);
 
@@ -65,7 +68,6 @@ export default function EditInfo({ department, user, onSave }) {
         }
 
         console.log('Request body:', JSON.stringify(changes, null, 2));
-        // Chỉ gửi những trường đã thay đổi
         if (Object.keys(changes).length > 0) {
             message.success('Cập nhật thông tin thành công');
             onSave(changes);
@@ -73,64 +75,32 @@ export default function EditInfo({ department, user, onSave }) {
     };
 
     const handleInputChange = (field, value) => {
-        if (field.startsWith('dob.')) {
-            const dobField = field.split('.')[1];
-            setEditedUser(prev => ({
-                ...prev,
-                dob: {
-                    ...prev.dob,
-                    [dobField]: parseInt(value) || 0
-                }
-            }));
-        } else {
-            setEditedUser(prev => ({
-                ...prev,
-                [field]: value
-            }));
-        }
+        setEditedUser(prev => ({
+            ...prev,
+            [field]: value
+        }));
     };
 
-    const handleDobChange = (e) => {
-        let value = e.target.value;
-        // Chỉ cho phép nhập số và dấu /
-        value = value.replace(/[^\d/]/g, '');
-        
-        // Xử lý khi xóa
-        if (value.length < dobInput.length) {
-            setDobInput(value);
-            return;
-        }
-
-        // Thêm dấu / tự động
-        if (value.length === 2 && !value.includes('/')) {
-            value = value + '/';
-        }
-        if (value.length === 5 && value.split('/').length === 2) {
-            value = value + '/';
-        }
-
-        // Giới hạn độ dài
-        if (value.length > 10) return;
-
-        setDobInput(value);
-
-        // Cập nhật editedUser khi đủ 10 ký tự
-        if (value.length === 10) {
-            const [day, month, year] = value.split('/');
+    const handleDateChange = (date) => {
+        if (date) {
             setEditedUser(prev => ({
                 ...prev,
                 dob: {
-                    day: parseInt(day),
-                    month: parseInt(month),
-                    year: parseInt(year)
+                    day: date.date(),
+                    month: date.month() + 1,
+                    year: date.year()
                 }
             }));
         }
     };
 
-    const displayDob = user.dob ? 
-        String(user.dob).padStart(8, '0').replace(/^(\d{4})(\d{2})(\d{2})$/, '$3/$2/$1') : 
-        '01/01/2000';
+    const getInitialDate = () => {
+        if (user?.dob) {
+            const dobString = String(user.dob).padStart(8, '0');
+            return dayjs(`${dobString.slice(0, 4)}-${dobString.slice(4, 6)}-${dobString.slice(6, 8)}`);
+        }
+        return dayjs('2000-01-01');
+    };
 
     return (
         <>
@@ -158,32 +128,23 @@ export default function EditInfo({ department, user, onSave }) {
                 <div className="info_body_left l-6 medium-6 c-12">
                     <div className='info_item'>
                         <div className='info_item_title'>Ngày sinh</div>
-                        <div className='info_item_content'>
-                            <input 
-                                type="text" 
-                                value={isEditing ? dobInput : displayDob}
+                            <DatePicker
+                                className='info_item_content date_picker'
                                 disabled={!isEditing}
-                                onChange={handleDobChange}
-                                placeholder="dd/mm/yyyy"
-                                className="dob-input"
+                                value={editedUser.dob ? dayjs(`${editedUser.dob.year}-${String(editedUser.dob.month).padStart(2,'0')}-${String(editedUser.dob.day).padStart(2,'0')}`) : getInitialDate()}
+                                onChange={handleDateChange}
+                                format="DD/MM/YYYY"
+                                placeholder="Chọn ngày sinh"
+                                suffixIcon={
+                                    <div className={`info_item_edit ${isEditing ? 'editing' : ''}`}>
+                                        {isEditing ? <FaCalendar style={{opacity: 0.8, cursor: 'default'}} /> : <FaCalendar />}
+                                    </div>
+                                }
                             />
-                            <div className={`info_item_edit ${isEditing ? 'editing' : ''}`}>
-                                {isEditing ? <FaEdit style={{opacity: 0.8, cursor: 'default'}} /> : <FaEdit />}
-                            </div>
-                        </div>
                     </div>
                     <div className='info_item'>
                         <div className='info_item_title'>Giới tính</div>
                         <div className='info_item_content'>
-                            {/* <input 
-                                type="text" 
-                                placeholder="Giới tính" 
-                                disabled={!isEditing}
-                                onChange={(e) => handleInputChange('gender', e.target.value)}
-                            />
-                            <div className={`info_item_edit ${isEditing ? 'editing' : ''}`}>
-                                {isEditing ? <FaAngleDown style={{opacity: 0.8, cursor: 'default'}} /> : <FaAngleDown />}
-                            </div> */}
                             <input 
                                 type="text" 
                                 disabled={true}
@@ -202,6 +163,7 @@ export default function EditInfo({ department, user, onSave }) {
                                 value={editedUser.hometown} 
                                 disabled={!isEditing}
                                 onChange={(e) => handleInputChange('hometown', e.target.value)}
+                                placeholder="Nhập quê quán"
                             />
                             <div className={`info_item_edit ${isEditing ? 'editing' : ''}`}>
                                 {isEditing ? <FaEdit style={{opacity: 0.8, cursor: 'default'}} /> : <FaEdit />}
@@ -218,6 +180,7 @@ export default function EditInfo({ department, user, onSave }) {
                                 value={editedUser.class_name} 
                                 disabled={!isEditing}
                                 onChange={(e) => handleInputChange('class_name', e.target.value)}
+                                placeholder="Nhập mã lớp"
                             />
                             <div className={`info_item_edit ${isEditing ? 'editing' : ''}`}>
                                 {isEditing ? <FaEdit style={{opacity: 0.8, cursor: 'default'}} /> : <FaEdit />}
@@ -232,6 +195,7 @@ export default function EditInfo({ department, user, onSave }) {
                                 value={editedUser.student_id} 
                                 disabled={!isEditing}
                                 onChange={(e) => handleInputChange('student_id', e.target.value)}
+                                placeholder="Nhập mã sinh viên"
                             />   
                             <div className={`info_item_edit ${isEditing ? 'editing' : ''}`}>
                                 {isEditing ? <FaEdit style={{opacity: 0.8, cursor: 'default'}} /> : <FaEdit />}
@@ -244,7 +208,7 @@ export default function EditInfo({ department, user, onSave }) {
                 {isEditing ? (
                     <button className="save_button" onClick={handleSaveClick}>Lưu</button>
                 ) : (
-                    <button className="edit_button" onClick={handleEditClick}>Sửa</button>
+                    <button className="edit_button" onClick={handleEditClick}>Chỉnh sửa</button>
                 )}
             </div>
         </>
